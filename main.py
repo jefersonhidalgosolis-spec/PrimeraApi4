@@ -12,6 +12,13 @@ class ProductoSchema(BaseModel):
     precio: float
     stock: int
 
+#5.GET 5555555555555555555555555555555555555555555555555555 
+#rama path 
+#Calcular la suma de precio de todos los productos 
+@app.get("/productos/resumen")
+def get_summary():
+    return {"valor_inventario": _service.calcular_valor_total()}
+    
 #GET (leer)
 #Esta peticion responde al endpoint Get que utliza la ruta /productos para activar esta funcion. La funcion debe mostrar 
 #la lista de productos llevando esta peticion al servicio para obtner los datos. 
@@ -49,5 +56,3 @@ def delete(p_id: int):
     if _service.borrar(p_id):
         return {"mensaje": "Eliminado correctamente"}
     raise HTTPException(status_code=404, detail="ID no existente")
-
-

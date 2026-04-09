@@ -77,3 +77,20 @@ class ProductoRepository:
         filas = cursor.rowcount
         conn.close()
         return filas > 0
+
+#55555555555555555555555555555555555555555555555555555555555555555555555555555555555555 
+    def calcular(self):
+        try:
+            conn = self._get_connection()#abrir conexion con la BD 
+            cursor = conn.cursor()
+            # Usamos la función SUM de SQL para mayor velocidad
+            query = "SELECT SUM(precio * stock) AS total FROM productos"
+            cursor.execute(query)
+            
+            row = cursor.fetchone()
+            # Si la tabla está vacía, row[0] podría ser None, devolvemos 0 en ese caso
+            return row[0] if row and row[0] is not None else 0.0
+            
+        except Exception as e:
+            print(f"Error al calcular total: {e}")
+            return 0.0        

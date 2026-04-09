@@ -29,3 +29,7 @@ class ProductoService:
 
     def borrar(self, p_id: int):
         return self.repo.eliminar(p_id)
+
+    #555555555555555555555555555555555555555555555555555555
+    def calcular_valor_total(self):
+        return self.repo.calcular()
