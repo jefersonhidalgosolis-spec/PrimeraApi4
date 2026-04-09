@@ -40,11 +40,20 @@ class ProductoRepository:
     def obtener_por_id(self, p_id: int):
         conn = self._get_connection()#abrir conexion con la BD 
         cursor = conn.cursor()
-        cursor.execute("SELECT id, nombre, precio, stock FROM Productos WHERE id = ?", (p_id,)) #ejecutar la consulta SQL para extraer los registros de un id especifico de la tabla 'Productos'
-        row = cursor.fetchone()
-        if row:
-            return {"id": row[0], "nombre": row[1], "precio": float(row[2]), "stock": row[3]}#estructura de datos compatibles en formato JSON 
-            conn.close()#cierra conexion 
+        try:
+            # La sintaxis {CALL ...} es perfecta para SQL Server (pyodbc)
+            cursor.execute("{CALL sp_ObtenerProductoPorID (?)}", (p_id,))
+            row = cursor.fetchone()
+            if row:# Creamos el diccionario antes de cerrar para no perder los datos
+                return {
+                    "id": row[0], 
+                    "nombre": row[1], 
+                    "precio": float(row[2]), 
+                    "stock": row[3]
+                }
+        finally:
+            # El bloque finally garantiza que la conexión se cierre
+            conn.close()
         return None
 
     #crear_nuevo
